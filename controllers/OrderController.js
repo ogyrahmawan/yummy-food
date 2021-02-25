@@ -2,44 +2,29 @@ const {Order, User, Restaurant, Dish} = require('../models/index')
 class OrderController {
   static async getAllOrderData (req, res, next) {
     try {
-      let data = await Order.findALl({
-        include: {
-          model: Restaurant, User, Dish
-        }
-      })
-      res.status(200).json(data)
-    } catch (error) {
-      next(error)
-    }
-  }
-  static async getOrderByUser (req, res, next) {
-    try {
-      let UserId = req.params.UserId
-      let data = await Order.findALl({
-        where: {
-          UserId
-        },
-        include: {
-          model: Restaurant, User, Dish
-        }
-      })
-      res.status(200).json(data)
-    } catch (error) {
-      next(error)
-    }
-  }
-  static async getOrderByRestaurant (req, res, next) {
-    try {
-      let RestaurantId = req.params.RestaurantId
-      let data = await Order.findALl({
-        where: {
-          RestaurantId
-        },
-        include: {
-          model: Restaurant, User, Dish
-        }
-      })
-      res.status(200).json(data)
+      let {filter, id} = req.query
+      if(!filter) {
+        let data = await Order.findAll({
+          include: ["User","Restaurant","Dish"]
+        })
+        res.status(200).json(data)
+      } else if(filter === 'restaurant') {
+        let data = await Order.findAll({
+          where: {
+            RestaurantId: id
+          },
+          include: ["User","Restaurant","Dish"]
+        })
+        res.status(200).json(data)
+      } else if(filter === 'user') {
+        let data = await Order.findAll({
+          where: {
+            UserId: id
+          },
+          include: ["User","Restaurant","Dish"]
+        })
+        res.status(200).json(data)
+      }
     } catch (error) {
       next(error)
     }
@@ -53,7 +38,10 @@ class OrderController {
         quantity: req.body.quantity,
         note: req.body.note ? req.body.note : ''
       }
-      let newOrder = Order.create(obj)
+      let newOrder = await Order.create(obj, {
+        include: ['User','Restaurant', 'Dish'],
+        attributes: ['quantity', 'note']
+      })
       res.status(200).json(newOrder)
     } catch (error) {
       next(error)
@@ -69,12 +57,13 @@ class OrderController {
         quantity: req.body.quantity,
         note: req.body.note ? req.body.note : ''
       }
-      let updatedOrder = Order.update(obj, {
+      let updatedOrder = await Order.update(obj, {
         where: {
           id
-        }
+        },
+        returning: true
       })
-      res.status(200).json(updatedOrder)
+      res.status(200).json(updatedOrder[1])
     } catch (error) {
       next(error)
     }
@@ -87,7 +76,14 @@ class OrderController {
           id
         },
       })
-      res.status(200).json({message: 'Delete Success'})
+      if(data === 0) {
+        throw({
+          status: 400,
+          message: "data not found"
+        })
+      } else {
+        res.status(200).json({message: 'Delete Success'})
+      }
     } catch (error) {
       next(error)
     }
@@ -95,17 +91,30 @@ class OrderController {
   static async cancelOrder (req, res, next) {
     try {
       let promises = []
+      //req.body.orderData ini yg dikirim array of order id 
       let data = req.body.orderData
       for(let i = 0; i < data.length; i++) {
         promises.push(await Order.destroy({
           where: {
-            id: data[i].id
+            id: +data[i]
           }
         }))
       }
-      let result = Promise.all(promises)
-      res.status(200).json({message: "Order Canceled"})
+      let result = await Promise.all(promises)
+      let isSuccess = result.findIndex(el => {
+        return el === 0
+      })
+      if(isSuccess !== -1) {
+        throw({
+          status: 400,
+          message: "data not found"
+        })
+      }else {
+        res.status(200).json({message: "Order Canceled"})
+      }
+      console.log(result)
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }

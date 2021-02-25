@@ -20,6 +20,25 @@ class TagController {
       next(error) 
     }
   }
+  static async deleteTag(req, res, next) {
+    try {
+      let id = req.params.id
+      let deletedTag = await Tag.destroy({
+        where: {
+          id
+        }
+      })
+      if(deletedTag === 0) {
+        throw({
+          status: 200,
+          message: 'data not found'
+        })
+      }
+      res.status(200).json({message: 'delete success'})
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = TagController

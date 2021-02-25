@@ -2,8 +2,6 @@ const OrderController = require('../controllers/OrderController')
 
 const route = require('express').Router()
 route.get('/', OrderController.getAllOrderData)
-route.get('/:UserId', OrderController.getOrderByUser)
-route.get('/:RestaurantId', OrderController.getOrderByRestaurant)
 route.post('/', OrderController.createOrder)
 route.put('/:id', OrderController.editOrder)
 route.delete('/:id', OrderController.deleteDishInOrder)

@@ -21,9 +21,23 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Dish.init({
-    name: DataTypes.STRING,
-    price: DataTypes.INTEGER,
-    image: DataTypes.STRING
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        min: 1000
+      }
+    },
+    image: DataTypes.STRING,
+    RestaurantId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Dish',

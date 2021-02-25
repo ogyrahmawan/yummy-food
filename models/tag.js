@@ -11,13 +11,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Tag.belongsToMany(model.Restaurant, {
+      Tag.belongsToMany(models.Restaurant, {
         through: models.Taggable
       })
+      Tag.hasMany(models.Taggable)
     }
   };
   Tag.init({
-    name: DataTypes.STRING
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
+    }
   }, {
     sequelize,
     modelName: 'Tag',

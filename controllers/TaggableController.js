@@ -1,41 +1,33 @@
-const {Taggable, Tag, Restaurant} = require('../models/index')
+const { Op } = require("sequelize");
+const {Taggable, Tag, Restaurant, Dish} = require('../models/index')
 class TaggableController {
-  static async getTaggable (req, res, next) {
-    try {
-      
-    } catch (error) {
-      
-    }
-  }
+
   static async createTaggabel (req, res, next) {
     try {
       const obj = {
         TagId: req.body.TagId,
         RestaurantId: req.body.RestaurantId
       }
-      let newTaggable = await Taggable.create(obj)
-      res.status(200).json(newTaggable)
-    } catch (error) {
-      next(error)
-    }
-  }
-  static async editTaggable (req, res, next) {
-    try {
-      const id = req.params.id
-      const obj = {
-        TagId: req.body.TagId,
-        RestaurantId: req.body.RestaurantId
-      }
-      let updateTaggable = await Taggable.update(obj, {
+      let data = await Taggable.findAll({
         where: {
-          id
+          TagId: req.body.TagId,
+          RestaurantId: req.body.RestaurantId
         }
       })
-      res.status(200).json(updateTaggable)
+      if(data.length > 0) {
+        throw({
+          status: 400,
+          message: 'this restaurant already have this tag'
+        })
+      } else {
+        let newTaggable = await Taggable.create(obj)
+        res.status(200).json(newTaggable)
+      }
     } catch (error) {
       next(error)
     }
   }
+
   static async deleteTaggable (req, res, next) {
     try {
       const id = req.params.id
@@ -44,7 +36,14 @@ class TaggableController {
           id
         }
       })
-      res.status(200).json(deleteTaggable)
+      if(deleteTaggable === 0) {
+        throw({
+          status: 400,
+          message: 'data not found'
+        })
+      } else {
+        res.status(200).json({message: 'delete successfull'})
+      }
     } catch (error) {
       next(error)
     }

@@ -1,4 +1,5 @@
 'use strict';
+const {hash} = require('../helper/bcrypt')
 const {
   Model
 } = require('sequelize');
@@ -11,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.belongsToMany(models.Dishes, {
+      User.belongsToMany(models.Dish, {
         through: models.Order
       })
       User.belongsToMany(models.Restaurant, {
@@ -21,8 +22,28 @@ module.exports = (sequelize, DataTypes) => {
   };
   User.init({
     name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        isEmail: true
+      }
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        notNull: true,
+        minLength(value){
+          if(value.length < 4){
+            throw new Error(`min password length is 4`)
+          }                                                             
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',

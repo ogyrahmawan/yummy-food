@@ -20,7 +20,14 @@ module.exports = (sequelize, DataTypes) => {
     UserId: DataTypes.INTEGER,
     RestaurantId: DataTypes.INTEGER,
     DishId: DataTypes.INTEGER,
-    quantity: DataTypes.INTEGER,
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        min: 1
+      }
+    },
     note: DataTypes.STRING
   }, {
     sequelize,
