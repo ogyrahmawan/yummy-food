@@ -1,8 +1,11 @@
 const OrderController = require('../controllers/OrderController')
 
 const route = require('express').Router()
-route.get('/', OrderController)
-route.post('/', OrderController)
-route.put('/:id', OrderController)
-route.delete('/:id', OrderController)
+route.get('/', OrderController.getAllOrderData)
+route.get('/:UserId', OrderController.getOrderByUser)
+route.get('/:RestaurantId', OrderController.getOrderByRestaurant)
+route.post('/', OrderController.createOrder)
+route.put('/:id', OrderController.editOrder)
+route.delete('/:id', OrderController.deleteDishInOrder)
+route.delete('/', OrderController.cancelOrder)
 module.exports = route

@@ -22,3 +22,9 @@
 
 ## 9,49
 - controller CRUD for Dish
+
+## 11.30 
+- controller CRUD for Taggable
+
+## 12.00
+- controller CRUD for Order
