@@ -8,20 +8,23 @@
 ## 08.30
 - migration
 
-## 8.45
+## 08.45
 - config route (login, register, CRUD Restaurant, CRUD Dishes, CRUD Tags, CRUD Order)
 
-## 9.00
+## 09.00
 - controller login & register for user
 
-## 9.30
+## 09.30
 - controller CR for tag
 
-## 9.40
+## 09.40
 - controller CRUD for Restaurant
 
-## 9,49
+## 09.49
 - controller CRUD for Dish
+
+## 10.00 - 11.00
+break
 
 ## 11.30 
 - controller CD for Taggable
@@ -29,5 +32,18 @@
 ## 12.00
 - controller CRUD for Order
 
-## 23.50
-- add document via postman
+## 12.00 - 14.30 
+break
+
+## 14.30 - 18.15
+- make document and validation on model
+
+#18.15 - 21.30
+break
+
+## 21.30 - 23.50
+- add document via postman + validation on model 
+
+Jumat
+## 08.30 - 09.00
+- check code and add attributes Id to getOrder

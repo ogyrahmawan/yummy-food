@@ -9,7 +9,7 @@ Create Yummy Food, using express
 # USAGE
 ```
 Make sure you have Node.js and npm in your computer and then run `npm install`.
-Run `nodemon app.js  to start the server.
+Run `nodemon app.js  to start the se  rver.
 ```
 
 # Documentation 

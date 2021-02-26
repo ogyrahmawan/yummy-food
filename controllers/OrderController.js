@@ -5,7 +5,8 @@ class OrderController {
       let {filter, id} = req.query
       if(!filter) {
         let data = await Order.findAll({
-          include: ["User","Restaurant","Dish"]
+          include: ["User","Restaurant","Dish"],
+          attributes: ['id', 'UserId', 'RestaurantId', 'DishId']
         })
         res.status(200).json(data)
       } else if(filter === 'restaurant') {
@@ -13,7 +14,8 @@ class OrderController {
           where: {
             RestaurantId: id
           },
-          include: ["User","Restaurant","Dish"]
+          include: ["User","Restaurant","Dish"],
+          attributes: ['id', 'UserId', 'RestaurantId', 'DishId']
         })
         res.status(200).json(data)
       } else if(filter === 'user') {
@@ -21,7 +23,8 @@ class OrderController {
           where: {
             UserId: id
           },
-          include: ["User","Restaurant","Dish"]
+          include: ["User","Restaurant","Dish"],
+          attributes: ['id', 'UserId', 'RestaurantId', 'DishId']
         })
         res.status(200).json(data)
       }
@@ -112,9 +115,7 @@ class OrderController {
       }else {
         res.status(200).json({message: "Order Canceled"})
       }
-      console.log(result)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }

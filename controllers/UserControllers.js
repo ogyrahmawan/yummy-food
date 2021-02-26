@@ -11,7 +11,6 @@ class UserController {
         password: req.body.password
       }
       let data = await User.create(user)
-      console.log(data)
       res.status(201).json(data)
     } catch (error) {
         next(error)
